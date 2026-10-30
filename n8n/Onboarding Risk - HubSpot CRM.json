@@ -1,0 +1,163 @@
+{
+  "name": "Onboarding Risk - HubSpot CRM",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "b1355a37-448d-4b21-9f5b-0ce9eb5e3158",
+        "authentication": "headerAuth",
+        "responseMode": "lastNode",
+        "options": {
+          "responseContentType": "application/json"
+        }
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        0
+      ],
+      "id": "7d5dbfda-310f-4c76-82e3-8fc336dc9f7f",
+      "name": "Webhook",
+      "webhookId": "b1355a37-448d-4b21-9f5b-0ce9eb5e3158",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "wCjIL1rYWtTkrb9X",
+          "name": "Header Auth account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "appToken",
+        "resource": "company",
+        "name": "={{ $json.body.client }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2.2,
+      "position": [
+        176,
+        0
+      ],
+      "id": "22a965e7-1174-4d50-b287-5ad9fa37b604",
+      "name": "Create a company",
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "DUGNCjL2eVLdhxg8",
+          "name": "HubSpot Service Key account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "appToken",
+        "resource": "ticket",
+        "pipelineId": "0",
+        "stageId": "4529586920",
+        "ticketName": "={{ $(\"Webhook\").item.json.body.risk + \" · \" + $(\"Webhook\").item.json.body.client + \" — \" + $(\"Webhook\").item.json.body.project + \" [\" + $(\"Webhook\").item.json.body.evaluationId + \"]\" }}",
+        "additionalFields": {
+          "associatedCompanyIds": "={{ [$json.companyId] }}",
+          "description": "={{ \"Contacto: \" + $(\"Webhook\").item.json.body.contact + \" (\" + $(\"Webhook\").item.json.body.contactEmail + \") | Responsable: \" + $(\"Webhook\").item.json.body.owner + \" | Riesgo: \" + $(\"Webhook\").item.json.body.risk + \" | Probabilidades: \" + JSON.stringify($(\"Webhook\").item.json.body.probabilities) + \" | Ruta: \" + $(\"Webhook\").item.json.body.route + \" | Recomendación: \" + $(\"Webhook\").item.json.body.recommendation.text + \" | Evaluación: \" + $(\"Webhook\").item.json.body.evaluationId + \" | Modelo: \" + $(\"Webhook\").item.json.body.modelVersion }}",
+          "priority": "={{ $(\"Webhook\").item.json.body.risk === \"High\" || $(\"Webhook\").item.json.body.risk === \"Critical\" ? \"HIGH\" : $(\"Webhook\").item.json.body.risk === \"Medium\" ? \"MEDIUM\" : \"LOW\" }}"
+        }
+      },
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 2.2,
+      "position": [
+        352,
+        0
+      ],
+      "id": "4468e43a-7319-4558-a68c-cde5aee99fd5",
+      "name": "Create a ticket",
+      "credentials": {
+        "hubspotAppToken": {
+          "id": "DUGNCjL2eVLdhxg8",
+          "name": "HubSpot Service Key account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "9effb5b4-1683-4cd7-b7a9-98f3f75700e1",
+              "name": "status",
+              "value": "SUCCESS",
+              "type": "string"
+            },
+            {
+              "id": "dfd1ad25-b4d4-46e0-bf72-82e2f9ee995b",
+              "name": "recordId",
+              "value": "={{ $json.objectId }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        528,
+        0
+      ],
+      "id": "58017eb8-e078-4e1e-83e2-5e41a9c0688d",
+      "name": "Edit Fields"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Create a company",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a company": {
+      "main": [
+        [
+          {
+            "node": "Create a ticket",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create a ticket": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "timeSavedMode": "fixed",
+    "saveDataErrorExecution": "all",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "versionId": "5ce272c5-9afd-4225-a8a0-30064c7cca2b",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "22b6dc15401a371393f304a8b794ac6e288480aac7df45828467bb69688323ea"
+  },
+  "nodeGroups": [],
+  "id": "FfL157pfgu3rI2DB",
+  "tags": []
+}
