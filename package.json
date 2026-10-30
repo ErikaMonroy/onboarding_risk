@@ -7,9 +7,9 @@
     "dev": "pnpm --filter @buk/onboarding-risk-frontend dev",
     "build": "pnpm --filter @buk/onboarding-risk-frontend build && node apps-script/scripts/sync-build.mjs",
     "test:model": "node tests/model-parity.mjs",
-    "gas:pull": "pnpm --dir apps-script exec clasp pull",
-    "gas:push": "pnpm --dir apps-script exec clasp push",
-    "gas:status": "pnpm --dir apps-script exec clasp status"
+    "gas:pull": "pnpm exec clasp --project apps-script pull",
+    "gas:push": "pnpm exec clasp --project apps-script push",
+    "gas:status": "pnpm exec clasp --project apps-script status"
   },
   "devDependencies": {
     "@google/clasp": "^3.4.1"
