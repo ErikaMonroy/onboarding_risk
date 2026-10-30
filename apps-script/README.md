@@ -11,7 +11,7 @@ Esta carpeta contiene el código de servidor y los archivos que sirven la interf
 - `Integrations.gs`: llama al webhook del agente y al webhook CRM de n8n cuando están configurados.
 - `ModelSmokeTest.gs`: comparación de inferencia en cuatro ejemplos de referencia; no hace escrituras ni llamadas HTTP.
 - `Index.html`: estructura principal de HTML Service.
-- `Client.html` y `Styles.html`: bundles de Vite. Son generados, no son fuente de edición.
+- `Client.html` y `Styles.html`: bundles legibles de Vite. Incluyen un encabezado con el mapa de funciones/estilos; son generados, no son fuente de edición.
 - `appsscript.json`: manifiesto con runtime V8, zona horaria y scopes para Sheets y solicitudes HTTP.
 
 ## Configuración privada

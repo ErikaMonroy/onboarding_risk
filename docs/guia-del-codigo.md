@@ -80,7 +80,7 @@ No hay claves ni IDs privados cableados en estos archivos; el ID del Sheet vive 
 ### Archivos HTML generados de Apps Script
 
 - `apps-script/Index.html` monta el contenedor y los archivos `Styles`/`Client` mediante HTML Service.
-- `apps-script/Client.html` y `apps-script/Styles.html` son bundles que produce `pnpm build`. No hacerles cambios a mano: Vite puede sobrescribirlos.
+- `apps-script/Client.html` y `apps-script/Styles.html` son bundles legibles que produce `pnpm build`. Incluyen encabezados de orientación y conservan formato para facilitar la lectura en Apps Script. No hacerles cambios a mano: Vite puede sobrescribirlos.
 - `apps-script/scripts/sync-build.mjs` copia el bundle CSS y JS del directorio `apps-script/build/` a esos dos HTML.
 
 ## Dónde vive el agente y dónde vive la predicción

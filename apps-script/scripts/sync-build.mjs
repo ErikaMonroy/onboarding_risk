@@ -15,16 +15,96 @@ const buildDir = path.join(appScriptDir, "build");
 const styles = await readFile(path.join(buildDir, "Styles.css"), "utf8");
 const client = await readFile(path.join(buildDir, "Client.js"), "utf8");
 
-// Los comentarios externos sobreviven a la minificación y orientan a quien abre GAS.
+/**
+ * Agrega saltos e indentación al CSS compilado de Tailwind.
+ * El generador entrega reglas válidas en una línea; este formateador sencillo
+ * conserva strings, comentarios y paréntesis sin reescribir los valores CSS.
+ */
+function formatCss(css) {
+  let output = "";
+  let depth = 0;
+  let quote = "";
+  let comment = false;
+  let parens = 0;
+
+  for (let i = 0; i < css.length; i++) {
+    const char = css[i];
+    const next = css[i + 1];
+
+    if (comment) {
+      output += char;
+      if (char === "*" && next === "/") {
+        output += next;
+        i++;
+        comment = false;
+      }
+      continue;
+    }
+
+    if (quote) {
+      output += char;
+      if (char === "\\") output += css[++i] || "";
+      else if (char === quote) quote = "";
+      continue;
+    }
+
+    if (char === "/" && next === "*") {
+      output += "/*";
+      i++;
+      comment = true;
+    } else if (char === "\"" || char === "'") {
+      quote = char;
+      output += char;
+    } else if (char === "(") {
+      parens++;
+      output += char;
+    } else if (char === ")") {
+      parens--;
+      output += char;
+    } else if (parens === 0 && char === "{") {
+      output = output.trimEnd() + " {\n";
+      depth++;
+      output += "  ".repeat(depth);
+    } else if (parens === 0 && char === ";") {
+      output = output.trimEnd() + ";\n" + "  ".repeat(depth);
+    } else if (parens === 0 && char === "}") {
+      output = output.trimEnd();
+      if (output.endsWith(";")) output += "\n";
+      depth = Math.max(0, depth - 1);
+      if (!output.endsWith("\n")) output += "\n";
+      output += "  ".repeat(depth) + "}\n";
+      if (depth > 0) output += "  ".repeat(depth);
+    } else {
+      output += char;
+    }
+  }
+
+  return output.replace(/[ \t]+\n/g, "\n").replace(/\n{3,}/g, "\n\n").trim() + "\n";
+}
+
+// Los encabezados identifican la fuente, las responsabilidades y el punto de edición.
 const stylesHtml = [
-  "<!-- Generado desde frontend/src/styles.css por pnpm build. No editar a mano. -->",
-  "<style>", styles, "</style>"
-].join("");
+  "<!--",
+  "  CSS compilado desde frontend/src/styles.css por pnpm build.",
+  "  La hoja está organizada por tema: variables globales, navegación, elementos de interfaz,",
+  "  formulario, resultados, estados y reglas responsive.",
+  "  Edita la fuente CSS y vuelve a compilar; este archivo se genera automáticamente.",
+  "-->",
+  "<style>", formatCss(styles), "</style>"
+].join("\n");
 const clientHtml = [
-  "<!-- Generado desde frontend/src/main.js y model-input.js por pnpm build. -->",
-  "<!-- Este bundle presenta/captura datos; la inferencia vive en apps-script/Model.gs. -->",
+  "<!--",
+  "  JavaScript compilado desde frontend/src/main.js y model-input.js por pnpm build.",
+  "  El cliente renderiza pantallas, valida/captura el formulario y llama al servidor con google.script.run.",
+  "  Funciones de presentación: nav y wrap (marco común); table y home (resumen); form y field (intake);",
+  "  review (confirmación); history (consulta); result (resultado y CRM); loading (estado de espera).",
+  "  Funciones de flujo: render (pinta la vista); capture y valid (datos del formulario);",
+  "  gasRequest (puente a google.script.run); historyRow y loadHistory (histórico); evaluate (envía una evaluación).",
+  "  La predicción no ocurre aquí: está en apps-script/Model.gs, función predictRisk_.",
+  "  Edita frontend/src y vuelve a compilar; este archivo se genera automáticamente.",
+  "-->",
   "<script>", client, "</script>"
-].join("");
+].join("\n");
 
 // Bloquear el cierre de etiqueta inyectado desde JS antes de insertarlo en <script>.
 if (/<\/script/i.test(client)) {
