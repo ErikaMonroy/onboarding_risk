@@ -2,8 +2,6 @@
 
 Prototipo de intake que estima el nivel de riesgo de un proyecto nuevo y propone una ruta inicial de atención. La predicción del despliegue se calcula en el servidor de Google Apps Script (V8) con una regresión logística entrenada previamente en Python. El resultado y su trazabilidad se guardan en Google Sheets. Dos workflows opcionales de n8n pueden interpretar el resultado con un agente y registrar una acción en HubSpot.
 
-> Es un prototipo de apoyo a la decisión. El modelo no alcanza la meta exploratoria de macro-F1 > 0,80, sus probabilidades no están calibradas y el resultado requiere revisión humana. La ruta de atención no es una decisión automática irrevocable.
-
 ## Flujo en una frase
 
 El formulario recoge 13 variables del proyecto; `Client.html` envía los datos con `google.script.run`; `Code.gs` valida, llama a `Model.gs`, guarda en Sheets, solicita interpretación/CRM a n8n si está configurado y devuelve el resultado a la interfaz.
