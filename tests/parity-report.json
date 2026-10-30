@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "rows": 4000,
+  "classMatches": 4000,
+  "maxProbabilityError": 5.551115123125783e-16,
+  "modelVersion": "risk-logistic-13-628382a80a1b",
+  "checks": [
+    "paridad Python/JavaScript con interacciones",
+    "13 campos: cinco numéricos y ocho categóricos",
+    "categorías del formulario",
+    "validación de entradas",
+    "flujo sin webhooks",
+    "respaldo n8n",
+    "error de predicción"
+  ]
+}

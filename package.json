@@ -1,0 +1,17 @@
+{
+  "name": "buk-onboarding-risk",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "pnpm --filter @buk/onboarding-risk-frontend dev",
+    "build": "pnpm --filter @buk/onboarding-risk-frontend build && node apps-script/scripts/sync-build.mjs",
+    "test:model": "node tests/model-parity.mjs",
+    "gas:pull": "pnpm --dir apps-script exec clasp pull",
+    "gas:push": "pnpm --dir apps-script exec clasp push",
+    "gas:status": "pnpm --dir apps-script exec clasp status"
+  },
+  "devDependencies": {
+    "@google/clasp": "^3.4.1"
+  }
+}

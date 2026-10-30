@@ -1,0 +1,5 @@
+packages:
+  - frontend
+  - node-api
+allowBuilds:
+  esbuild: true

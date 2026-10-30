@@ -1,0 +1,50 @@
+# Dependencias y artefactos locales de desarrollo
+node_modules/
+**/node_modules/
+dist/
+**/dist/
+apps-script/build/
+**/*.log
+
+# Secretos y configuración de cuentas/proyectos (Google, n8n, CRM)
+.env
+.env.*
+!.env.example
+**/.clasprc.json
+**/.clasp.json
+**/credentials.json
+**/service-account*.json
+**/*secret*
+**/*token*
+
+# Datos históricos, dumps locales y entornos de entrenamiento
+*.csv
+*.xlsx
+*.xls
+*.joblib
+*.pkl
+*.pickle
+*.parquet
+*.db
+*.sqlite
+.venv/
+.venv_*/
+venv/
+__pycache__/
+**/__pycache__/
+
+# Resultados y copias temporales: solo versionar documentación de código
+tests/generated/
+_support_backup_remoto/
+.agents/
+docs/build_word_deliverables.py
+docs/resultado-prueba.png
+docs/n8n-borrador.png
+docs/formulario-espanol.png
+docs/formulario-ejemplos.png
+node-api/model/
+
+# Sistema operativo y editor
+.DS_Store
+Thumbs.db
+.vscode/
