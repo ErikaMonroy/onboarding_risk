@@ -62,4 +62,4 @@ flowchart TD
 
 ## Limitaciones visibles
 
-La evaluación no alcanza la meta de macro-F1 > 0,80 del reto. Macro-F1/accuracy reportadas en el experimento de 13 campos estuvieron aproximadamente en 0,54. Las probabilidades no están calibradas. Mostrar más decimales no hace más confiable la predicción. Antes de utilizarlo como política real se requiere validación temporal/externa, revisión de errores por clase, calibración, monitoreo de datos y aprobación de las reglas por Onboarding.
+El caso no fijó un umbral de desempeño ni exigió este stack. Macro-F1/accuracy reportadas en el experimento de 13 campos estuvieron aproximadamente en 0,54. Las probabilidades no están calibradas. Mostrar más decimales no hace más confiable la predicción. Antes de utilizarlo como política real se requiere validación temporal/externa, revisión de errores por clase, calibración, monitoreo de datos y aprobación de las reglas por Onboarding.
